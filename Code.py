@@ -1,7 +1,8 @@
-from grove.adc import ADC
 import time
+from grove.adc import ADC
 from datetime import datetime
 from grove.grove_relay import GroveRelay
+import requests
 
 adc = ADC(address=0x08)          
 CHANNEL = 0          
@@ -25,6 +26,17 @@ def kastelu():
         time.sleep(5)
         print("Relay OFF")
         relay.off()
+    
+def laheta_thingspeakiin():
+    measurement = {}
+    measurement["api_key"] = "7ERPM16L8N2L1P92"
+    measurement["field1"] = kosteus_prosentti.kosteus()
+
+    response = requests.post(
+        "https://api.thingspeak.com/update.json",
+        json=measurement
+    )
         
 
 kastelu()
+laheta_thingspeakiin()
